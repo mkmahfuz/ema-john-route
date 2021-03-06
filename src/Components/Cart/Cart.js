@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 
 const Cart = (props) => {
     const cart = props.cart;
+    console.log(props.cart)
     //console.log(props.cart[4].name);
-    const totalPrice = cart.reduce((total,pd)=>total+pd.price,0);
+    const totalPrice = cart.reduce((total,pd)=>total+pd.price*pd.quantity,0);
+    // debugger;
     
     let shipping = 0;
     if(totalPrice>100){
@@ -21,6 +23,7 @@ const Cart = (props) => {
         <div>
             <h1>Order Summary</h1>
             <p>Items Ordered: {cart.length}</p>
+            
             <p>Total Price: {totalPrice} </p>
             <p>Shipping & handling: {shipping}</p>
             <p>Total before Tax: {totalWithoutTax}</p>
