@@ -8,9 +8,9 @@ const [cart,setCart] = useState([]);
 const [productCount,setProductCount] = useState([]);
     useEffect(()=>{
         const savedCart = getDatabaseCart(); //savedCart is an Object {productkey,count}
-        console.log(savedCart);
+        //console.log(savedCart);
         const productKeys = Object.keys(savedCart); //productkeys array
-        console.log(productKeys);
+        //console.log(productKeys);
         const productCounts = Object.values(savedCart);
         const totalProducts = productCounts.reduce((total,value)=>total + value,0);
         // console.log(productCounts);
