@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import fakeData from '../../fakeData';
 import { getDatabaseCart } from '../../utilities/databaseManager';
-import Product from '../Product/Product';
+
 import RiviewItem from '../ReviewItem/RiviewItem';
 
 const Review = () => {
@@ -11,7 +11,7 @@ const Review = () => {
         const savedData = getDatabaseCart();
         // setCart(savedData);
         const productkeys = Object.keys(savedData);
-
+        //create a new array of product object,and also set a product.quantity properties
         const cartProducts = productkeys.map(key=>{
             const product = fakeData.find(pd=>pd.key === key);
             product.quantity = savedData[key]
