@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import fakeData from '../../fakeData';
-import { getDatabaseCart, removeFromDatabaseCart } from '../../utilities/databaseManager';
+import { getDatabaseCart, processOrder, removeFromDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
-
+import happyImg from '../../images/giphy.gif';
 import RiviewItem from '../ReviewItem/RiviewItem';
 
 const Review = () => {
     // create a new cart state
     const [cart, setCart] = useState([]);
+    const [orderPlaced,setOrderPlaced] = useState(false);
+    const handlePlaceOrder = ()=>{
+        setCart([]);
+        setOrderPlaced(true);
+        processOrder();
+        console.log('place clicked')
+    };
+    const thankyou = <img src={happyImg} alt=""/>
     useEffect(() => {
         const savedData = getDatabaseCart();
         // setCart(savedData);
@@ -34,11 +43,18 @@ const Review = () => {
                 {
                     cart.map(pd => <RiviewItem key={pd.key} product={pd} removeProduct={removeProduct}></RiviewItem>)
                 }
+                {
+                    orderPlaced && thankyou
+                }
             </div>
             <div className="cart-container">
                 {/* <h3>Cart: </h3>
                 <h5>Order Summary: {cart.length}</h5> */}
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart}>
+                <Link to='/review'>
+                        <button className='addbtn' onClick={()=>handlePlaceOrder()}>Place Order</button>
+                    </Link>
+                </Cart>
             </div>
 
         </div>

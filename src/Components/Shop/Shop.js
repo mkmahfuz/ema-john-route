@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import fakeData from '../../fakeData';
-import { addToDatabaseCart } from '../../utilities/databaseManager';
+import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
 import './Shop.css';
+import { Link } from 'react-router-dom';
 const Shop = () => {
     // console.log(fakeData);
     const first10 = fakeData.slice(0, 10);
     const [products, setProducts] = useState(first10);
     //use another state for cart
     const [cart, setCart] = useState([]);
+    useEffect(() => {
+        const savedCart = getDatabaseCart();
+        // console.log(savedCart);
+        const productKeys = Object.keys(savedCart);
+        const previousCart = productKeys.map((pdkey) => {
+            const product = fakeData.find((pd) => pd.key === pdkey);
+            product.quantity = savedCart[pdkey];
+            return product;
+        });
+        console.log(previousCart);
+        setCart(previousCart);
+    }, []);
+
     //jekhane state thake shekhai eventhandler function likha valo
     const handleAddProduct = (product) => {
         //console.log(product);
@@ -19,19 +33,19 @@ const Shop = () => {
         if (sameProduct) {
             count = sameProduct.quantity + 1;
             sameProduct.quantity = count;
-            const others = cart.filter((pd)=>pd.key !== product.key);
-            newCart = [...others,sameProduct];
+            const others = cart.filter((pd) => pd.key !== product.key);
+            newCart = [...others, sameProduct];
             // newCart = [...cart,sameProduct];
         } else {
             //sameProduct = [...cart,product];
             product.quantity = count;
-            newCart = [...cart,product];
+            newCart = [...cart, product];
 
         }
         //new cart start
         // const newCart = [...cart, sameProduct]; //product is an object, so newCart is an array of objects
         // console.log(newCart);
-       setCart(newCart);
+        setCart(newCart);
 
         //new cart end
 
@@ -54,7 +68,11 @@ const Shop = () => {
             <div className="cart-container">
                 {/* <h3>Cart: </h3>
                 <h5>Order Summary: {cart.length}</h5> */}
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart}>
+                    <Link to='/review'>
+                        <button className='addbtn'>Review Your Order</button>
+                    </Link>
+                </Cart>
             </div>
 
         </div>
